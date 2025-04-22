@@ -1,0 +1,8 @@
+### Create the kafka topic
+GET http://localhost:8080/create
+Accept: application/json
+
+
+### Publish messages
+GET http://localhost:8080/publish?count=150
+Accept: application/json
