@@ -4,6 +4,6 @@ spring:
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
-      batch-size: 5000
+      batch-size: 1
     admin:
       client-id: kafkaAdminClient

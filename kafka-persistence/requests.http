@@ -4,5 +4,5 @@ Accept: application/json
 
 
 ### Publish messages
-GET http://localhost:8080/publish?count=150
+GET http://localhost:8080/publish?count=1
 Accept: application/json

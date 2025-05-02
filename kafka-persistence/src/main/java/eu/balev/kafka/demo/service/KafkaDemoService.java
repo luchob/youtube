@@ -44,8 +44,12 @@ public class KafkaDemoService {
 
       Map<String, String> configs = new HashMap<>();
       configs.put("segment.bytes", String.valueOf(10 * KILOBYTE));
+      configs.put("segment.ms", String.valueOf(10000));
 
-      NewTopic newTopic = new NewTopic(KAFKA_TEST_TOPIC, 3, (short) 1).configs(configs);
+      configs.put("cleanup.policy", "delete");
+      configs.put("retention.ms", "10000");
+
+      NewTopic newTopic = new NewTopic(KAFKA_TEST_TOPIC, 1, (short) 1).configs(configs);
 
       adminClient.createTopics(Collections.singletonList(newTopic)).all().get();
 
@@ -62,7 +66,7 @@ public class KafkaDemoService {
     for (int i = 0; i < count; i++) {
       try {
         CompletableFuture<SendResult<String, String>> result =
-            kafkaTemplate.send(KAFKA_TEST_TOPIC, UUID.randomUUID().toString(), createRandomMessage());
+            kafkaTemplate.send(KAFKA_TEST_TOPIC, UUID.randomUUID().toString(), createNonRandomMessage());
 
         all.add(result);
 
@@ -91,4 +95,19 @@ public class KafkaDemoService {
     return sb.toString();
   }
 
+  public static String createNonRandomMessage() {
+    StringBuilder sb = new StringBuilder();
+    Random random = new Random();
+
+    int index = random.nextInt(ALPHANUMERICAL_CHARACTERS.length());
+    sb.append(ALPHANUMERICAL_CHARACTERS.charAt(index));
+
+    while (sb.toString().getBytes(StandardCharsets.UTF_8).length < 63) {
+      sb.append(ALPHANUMERICAL_CHARACTERS.charAt(index));
+    }
+    return sb.toString();
+  }
+
+
+  //configs.put("segment.ms", String.valueOf(10000));
 }
