@@ -8,6 +8,7 @@ import org.springframework.kafka.core.KafkaAdmin;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.SendResult;
 import org.springframework.stereotype.Service;
+
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
@@ -43,11 +44,9 @@ public class KafkaDemoService {
       }
 
       Map<String, String> configs = new HashMap<>();
-      configs.put("segment.bytes", String.valueOf(10 * KILOBYTE));
-      configs.put("segment.ms", String.valueOf(10000));
 
-      configs.put("cleanup.policy", "delete");
-      configs.put("retention.ms", "10000");
+      configs.put("segment.bytes", String.valueOf(10 * KILOBYTE));
+      configs.put("cleanup.policy", "compact");
 
       NewTopic newTopic = new NewTopic(KAFKA_TEST_TOPIC, 1, (short) 1).configs(configs);
 
@@ -85,6 +84,16 @@ public class KafkaDemoService {
     });
   }
 
+  public void publishMessageWithKey(String key) {
+
+    try {
+      kafkaTemplate.send(KAFKA_TEST_TOPIC, key, createNonRandomMessage()).get();
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
+    LOGGER.info("Published message with key: {}", key);
+  }
+
   public static String createRandomMessage() {
     StringBuilder sb = new StringBuilder();
     Random random = new Random();
@@ -109,5 +118,6 @@ public class KafkaDemoService {
   }
 
 
-  //configs.put("segment.ms", String.valueOf(10000));
+//      configs.put("cleanup.policy", "delete");
+//      configs.put("retention.ms", "10000");
 }

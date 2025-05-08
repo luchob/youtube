@@ -26,4 +26,11 @@ public class KafkaDemoController {
         .publishMessages(count);
     return "published";
   }
+
+  @GetMapping("/publish-with-key")
+  public String publish(@RequestParam("key") String key) {
+    kafkaDemoService
+        .publishMessageWithKey(key);
+    return "published";
+  }
 }

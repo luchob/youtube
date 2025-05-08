@@ -4,5 +4,9 @@ Accept: application/json
 
 
 ### Publish messages
-GET http://localhost:8080/publish?count=1
+GET http://localhost:8080/publish?count=60
+Accept: application/json
+
+### Publish message with key
+GET http://localhost:8080/publish-with-key?key=af62b80c-5116-434c-b6e3-31f849fda165
 Accept: application/json
