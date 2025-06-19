@@ -1,0 +1,22 @@
+spring:
+  datasource:
+    url: "jdbc:postgresql://localhost:5432/posts?reWriteBatchedInserts=true&ApplicationName=batch-inserts"
+    #url: "jdbc:postgresql://localhost:5432/posts?ApplicationName=batch-inserts"
+    username: user
+    password: user
+  jpa:
+    properties:
+      hibernate:
+        order_inserts: true
+        order_updates: true
+        jdbc:
+          batch_size: 250
+
+  liquibase:
+    change-log: "classpath:/db/changelog/db.changelog-master.yaml"
+
+#Debug various features of the service, spring, hibernate, etc.
+logging:
+  level:
+    org.hibernate.SQL: DEBUG
+    org.hibernate.orm.jdbc.bind: TRACE

@@ -1,0 +1,71 @@
+databaseChangeLog:
+  - changeSet:
+      id: comments
+      author: luchob
+      changes:
+        # post table
+        - createTable:
+            tableName: post
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+              - column:
+                  name: post
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+                    notNullConstraintName: post_post_not_null
+
+        #  comment
+        - createTable:
+            tableName: comment
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: post_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    notNullConstraintName: asn_line_item_asn_id_not_null
+              - column:
+                  name: comment
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+                    notNullConstraintName: comment_comment_not_null
+
+        - sql:
+            sql: create sequence comment_id_seq start with 1 increment by 100
+
+        - addForeignKeyConstraint:
+            baseColumnNames: post_id
+            baseTableName: comment
+            constraintName: fk_comment_post_id
+            onDelete: CASCADE
+            referencedColumnNames: id
+            referencedTableName: post
+        - createIndex:
+            tableName: comment
+            columns:
+              - column:
+                  name: post_id
+                  type: bigint
+            indexName: fk_comment_post_id
+        - createIndex:
+            tableName: comment
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+            indexName: comment_id
+            unique: true
